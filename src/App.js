@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+// App.js
 import './App.css';
+import NavBar from './component/NavBar';
+import React, { Component } from 'react';
+import News from './component/News';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      mode: 'light', // light or dark
+    };
+  }
+
+  toggleMode = () => {
+    this.setState({
+      mode: this.state.mode === 'light' ? 'dark' : 'light'
+    }, () => {
+      document.body.style.backgroundColor = this.state.mode === 'dark' ? '#121212' : 'white';
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <NavBar mode={this.state.mode} toggleMode={this.toggleMode} />
+        <News mode={this.state.mode} />
+
+      </>
+    );
+  }
 }
-
-export default App;
