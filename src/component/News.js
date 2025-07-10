@@ -9,7 +9,7 @@ export class News extends Component {
       loading: false,
       page: 1,
       totalResults: 0,
-      pageSize: 9, // added for clarity
+      pageSize: 9,
     };
   }
 
@@ -18,15 +18,23 @@ export class News extends Component {
   }
 
   fetchNews = async (page) => {
-    const { pageSize } = this.state;
-    let url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&page=${page}&apiKey=567ada2a87014470bb176da498927167&pageSize=${pageSize}`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-      page: page,
-    });
+    try {
+      this.setState({ loading: true });
+      const { pageSize } = this.state;
+      let url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&page=${page}&apiKey=567ada2a87014470bb176da498927167&pageSize=${pageSize}`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+
+      this.setState({
+        articles: parsedData.articles || [],
+        totalResults: parsedData.totalResults || 0,
+        page: page,
+        loading: false,
+      });
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      this.setState({ loading: false });
+    }
   };
 
   handlePrevclick = () => {
@@ -43,27 +51,30 @@ export class News extends Component {
   };
 
   render() {
-    const { articles, page, totalResults, pageSize } = this.state;
+    const { articles, page, totalResults, pageSize, loading } = this.state;
     const maxPages = Math.ceil(totalResults / pageSize);
 
     return (
       <div className="container my-3">
-            <h2 className={`mb-4 text-${this.props.mode === 'light' ? 'dark' : 'light'}`}>
-      NewsMonkey - Top Headlines
-    </h2>
+        <h2 className={`mb-4 text-${this.props.mode === 'light' ? 'dark' : 'light'}`}>
+          NewsMonkey - Top Headlines
+        </h2>
+
+        {loading && <h5 className="text-center">Loading...</h5>}
 
         <div className="row">
-          {articles.map((element) => (
+          {articles && articles.map((element) => (
             <div className="col-md-4" key={element.url}>
               <NewsItem
-                title={element.title ? element.title.slice(0, 45) : ''}
-                description={element.description ? element.description.slice(0, 88) : ''}
-                imageUrl={element.urlToImage}
+                title={element.title ? element.title.slice(0, 45) : 'No Title'}
+                description={element.description ? element.description.slice(0, 88) : 'No Description'}
+                imageUrl={element.urlToImage || 'https://via.placeholder.com/150'}
                 newsUrl={element.url}
               />
             </div>
           ))}
         </div>
+
         <div className="container d-flex justify-content-between my-4">
           <button
             disabled={page <= 1}
