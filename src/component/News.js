@@ -21,7 +21,7 @@ export class News extends Component {
     try {
       this.setState({ loading: true });
       const { pageSize } = this.state;
-      let url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&page=${page}&apiKey=567ada2a87014470bb176da498927167&pageSize=${pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=us&page=${page}&apiKey=YOUR_API_KEY&pageSize=${pageSize}`;
       let data = await fetch(url);
       let parsedData = await data.json();
 
