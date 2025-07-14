@@ -21,12 +21,20 @@ export default class App extends Component {
   }
 
   render() {
-    return (
-      <>
-        <NavBar mode={this.state.mode} toggleMode={this.toggleMode} />
-        <News mode={this.state.mode} />
+  const apiKey = '8554f45100dd7e68d770314bff79f9f0';
+const endpoint = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=in&max=10`;
 
-      </>
-    );
-  }
+
+  return (
+    <>
+      <NavBar mode={this.state.mode} toggleMode={this.toggleMode} />
+      <News 
+        mode={this.state.mode} 
+        pageSize={9} 
+        apiUrl={endpoint}  // ✅ pass API URL as prop
+      />
+    </>
+  );
+}
+
 }

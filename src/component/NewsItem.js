@@ -1,8 +1,10 @@
+// NewsItem.js
 import React, { Component } from 'react';
 
 class NewsItem extends Component {
   render() {
-    let {
+    // Destructure props with default values
+    const {
       title = 'No Title Available',
       description = 'No description provided.',
       imageUrl = 'https://via.placeholder.com/150',
@@ -15,8 +17,8 @@ class NewsItem extends Component {
           <img
             src={imageUrl}
             className="card-img-top img-fluid"
-            style={{ maxHeight: "200px", objectFit: "cover" }}
             alt="News"
+            style={{ height: '200px', objectFit: 'cover' }}
           />
           <div className="card-body">
             <h5 className="card-title">
@@ -27,9 +29,9 @@ class NewsItem extends Component {
             </p>
             <a
               href={newsUrl}
+              className="btn btn-dark btn-sm"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-dark btn-sm"
             >
               Read More
             </a>
